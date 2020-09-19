@@ -16,14 +16,17 @@
               <a-input
                 autocomplete="autocomplete"
                 size="large"
-                placeholder="admin"
+                placeholder="请输入账户名"
                 v-decorator="['name', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
               >
                 <a-icon slot="prefix" type="user" />
               </a-input>
             </a-form-item>
             <a-form-item>
-              <a-input
+               <a-input-password   size="large"   placeholder="请输入密码" autocomplete="autocomplete" type="password"  v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]" >
+                  <a-icon slot="prefix" type="lock" />
+               </a-input-password>
+              <!-- <a-input
                 size="large"
                 placeholder="888888"
                 autocomplete="autocomplete"
@@ -31,7 +34,7 @@
                 v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
               >
                 <a-icon slot="prefix" type="lock" />
-              </a-input>
+              </a-input> -->
             </a-form-item>
           </a-tab-pane>
           <a-tab-pane tab="手机号登录" key="2">
@@ -98,6 +101,7 @@ export default {
   methods: {
     ...mapMutations('account', ['setUser', 'setPermissions', 'setRoles']),
     onSubmit (e) {
+      console.log(e)
       e.preventDefault()
       this.form.validateFields((err) => {
         if (!err) {
@@ -133,6 +137,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
   .common-layout{
     .top {
       text-align: center;
@@ -166,7 +171,7 @@ export default {
     .login{
       width: 368px;
       margin: 0 auto;
-      @media screen and (max-width: 576px) {
+      @media screen and (max-width:  @screen-sm) {
         width: 95%;
       }
       @media screen and (max-width: 320px) {

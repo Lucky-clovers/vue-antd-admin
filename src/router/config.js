@@ -4,6 +4,9 @@ import PageView from '@/layouts/PageView'
 
 // 路由配置
 const options = {
+  base: '/vue-antd-admin',
+  mode: 'history', // 去掉url中的#
+  scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
       path: '/login',
