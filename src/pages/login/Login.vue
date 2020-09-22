@@ -31,7 +31,7 @@
               <a-row :gutter="8" style="margin: 0 -4px">
                 <a-col :span="16">
                   <a-input size="large" placeholder="captcha">
-                    <a-icon slot="prefix" type="mail" />
+                    <a-icon  slot="prefix" type="safety-certificate" />
                   </a-input>
                 </a-col>
                 <a-col :span="8" style="padding-left: 4px">

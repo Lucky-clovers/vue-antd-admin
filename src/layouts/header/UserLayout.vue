@@ -1,5 +1,6 @@
 <template>
     <common-layout>
+
         <div class="top">
             <div class="header">
                 <img alt="logo" class="logo" src="@/assets/img/logo.png"/>

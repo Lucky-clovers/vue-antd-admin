@@ -4,7 +4,9 @@
         <a-form @submit="handleSubmit" :form="form">
             <a-form-item>
                 <a-input placeholder="邮箱" size="large"
-                         v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱地址!' }] }]"/>
+                         v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱地址!' }] }]">
+                <a-icon slot="prefix" type="mail" />
+                </a-input>
             </a-form-item>
             <a-popover placement="rightTop" v-model="visible">
                 <div style="padding: 4px 0;width:240px;" slot="content">
@@ -20,21 +22,27 @@
                     </div>
                 </div>
                 <a-form-item :help="help">
-                    <a-input type="password" placeholder="至少6位密码，区分大小写" size="large" v-decorator="['password', {rules: [
+                    <a-input type="password" autocomplete placeholder="至少6位密码，区分大小写" size="large" v-decorator="['password', {rules: [
                                             { validator: this.checkPassword }
-                                            ]}]"/>
+                                            ]}]">
+                    <a-icon slot="prefix" type="lock" />
+                    </a-input>
                 </a-form-item>
             </a-popover>
             <a-form-item>
-                <a-input type="password" placeholder="确认密码" size="large" v-decorator="['confirm', {rules: [
+                <a-input type="password" autocomplete placeholder="确认密码" size="large" v-decorator="['confirm', {rules: [
                                             { required: true, message: '请确认密码！', },
                                             { validator: this.checkConfirm, },
-                                            ]}]"/>
+                                            ]}]">
+                    <a-icon slot="prefix" type="lock" />
+                </a-input>
             </a-form-item>
             <a-form-item>
                 <a-input placeholder="11位手机号" size="large" v-decorator="['mobile', {rules: [
                                             { required: true, message: '请输入手机号！' },
                                             ]}]">
+                    <a-icon slot="prefix" type="mobile" />
+
                     <a-select slot="addonBefore" defaultValue="+86" style="width: 90px">
                         <a-select-option value="86">+86</a-select-option>
                         <a-select-option value="87">+87</a-select-option>
@@ -45,7 +53,9 @@
                 <a-row :gutter="8">
                     <a-col :span="16">
                         <a-input placeholder="验证码" size="large"
-                                 v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码!' }]}]"/>
+                                 v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码!' }]}]">
+                            <a-icon  slot="prefix" type="safety-certificate" />
+                        </a-input>
                     </a-col>
                     <a-col :span="8">
                         <a-send-captcha-button v-model="start" @click="send" :second="120" class="getCaptcha"
@@ -65,13 +75,14 @@
 </template>
 
 <script>
-
+    import {Register} from '@/services/user'
     import SendCaptchaButton from "@/components/SendCaptchaButton";
-
+   // import {loadRoutes} from '@/utils/routerUtil'
     export default {
         name: "ai-register",
         data() {
             return {
+                logging: false,
                 visible: false,
                 help: "",
                 passwordStatus: "poor",
@@ -123,14 +134,42 @@
                     callback();
                 }
             },
-            handleSubmit() {
-                this.form.validateFields((err, values) => {
+            handleSubmit(e) {
+                e.preventDefault()
+                this.form.validateFields((err,values) => {
                     if (!err) {
-                        console.log("Received values of form: ", values);
-                        //this.$router.push({path:'/'})
+                        this.logging = true
+                        console.log('Received values of form: ', values);
+
+                        Register(values).then((res)=>{
+                            this.logging = false
+                            if(res.data.code == 200){
+                                this.$router.push('/login')
+                            }
+                            console.log(res)
+                        })
                     }
-                });
+                })
             },
+            // afterLogin(res) {
+            //     this.logging = false
+            //     const loginRes = res.data
+            //     if (loginRes.code >= 0) {
+            //         const {user, permissions, roles} = loginRes.data
+            //         this.setUser(user)
+            //         this.setPermissions(permissions)
+            //         this.setRoles(roles)
+            //         // 获取路由配置
+            //         getRoutesConfig().then(result => {
+            //             const routesConfig = result.data.data
+            //             loadRoutes({router: this.$router, store: this.$store, i18n: this.$i18n}, routesConfig)
+            //             this.$router.push('/login')
+            //             this.$message.success(loginRes.message, 3)
+            //         })
+            //     } else {
+            //         this.error = loginRes.message
+            //     }
+            // },
             send() {
                 new Promise((resolve, reject) => {
                     this.form.validateFields(["mobile"], {}, (err) => {

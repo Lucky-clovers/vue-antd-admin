@@ -1,4 +1,4 @@
-import {LOGIN, ROUTES} from '@/services/api'
+import {LOGIN, ROUTES,REGISTER} from '@/services/api'
 import {request, METHOD, removeAuthorization} from '@/utils/request'
 
 /**
@@ -27,8 +27,30 @@ export function logout() {
   localStorage.removeItem(process.env.VUE_APP_ROLES_KEY)
   removeAuthorization()
 }
+
+/**
+ *注册账号
+ * @param captcha 验证码
+ * @param email 邮箱
+ * @param mobile 手机号
+ * @param password 密码
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+export async function Register(data){
+  return request(REGISTER,METHOD.POST,{
+    captcha: data.captcha,
+    confirm: data.confirm,
+    email: data.email,
+    mobile: data.mobile,
+    password: data.password,
+  })
+
+}
 export default {
   login,
   logout,
+  Register,
   getRoutesConfig
 }
+
+
