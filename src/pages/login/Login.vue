@@ -1,12 +1,4 @@
 <template>
-  <common-layout>
-    <div class="top">
-      <div class="header">
-        <img alt="logo" class="logo" src="@/assets/img/logo.png" />
-        <span class="title">{{systemName}}</span>
-      </div>
-      <div class="desc">Ant Design 是西湖区最具影响力的 Web 设计规范</div>
-    </div>
     <div class="login">
       <a-form @submit="onSubmit" :form="form">
         <a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">
@@ -26,15 +18,7 @@
                <a-input-password   size="large"   placeholder="请输入密码" autocomplete="autocomplete" type="password"  v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]" >
                   <a-icon slot="prefix" type="lock" />
                </a-input-password>
-              <!-- <a-input
-                size="large"
-                placeholder="888888"
-                autocomplete="autocomplete"
-                type="password"
-                v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
-              >
-                <a-icon slot="prefix" type="lock" />
-              </a-input> -->
+
             </a-form-item>
           </a-tab-pane>
           <a-tab-pane tab="手机号登录" key="2">
@@ -73,11 +57,9 @@
         </div>
       </a-form>
     </div>
-  </common-layout>
 </template>
 
 <script>
-import CommonLayout from '@/layouts/CommonLayout'
 import {login, getRoutesConfig} from '@/services/user'
 import {setAuthorization} from '@/utils/request'
 import {loadRoutes} from '@/utils/routerUtil'
@@ -85,7 +67,6 @@ import {mapMutations} from 'vuex'
 
 export default {
   name: 'Login',
-  components: {CommonLayout},
   data () {
     return {
       logging: false,
@@ -137,48 +118,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-  .common-layout{
-    .top {
-      text-align: center;
-      .header {
-        height: 44px;
-        line-height: 44px;
-        a {
-          text-decoration: none;
-        }
-        .logo {
-          height: 44px;
-          vertical-align: top;
-          margin-right: 16px;
-        }
-        .title {
-          font-size: 33px;
-          color: @title-color;
-          font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-          font-weight: 600;
-          position: relative;
-          top: 2px;
-        }
-      }
-      .desc {
-        font-size: 14px;
-        color: @text-color-second;
-        margin-top: 12px;
-        margin-bottom: 40px;
-      }
-    }
-    .login{
+  .common-layout {
+    .login {
       width: 368px;
       margin: 0 auto;
-      @media screen and (max-width:  @screen-sm) {
+      @media screen and (max-width: @screen-sm) {
         width: 95%;
       }
       @media screen and (max-width: 320px) {
-        .captcha-button{
+        .captcha-button {
           font-size: 14px;
         }
       }
+
       .icon {
         font-size: 24px;
         color: @text-color-second;

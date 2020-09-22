@@ -1,196 +1,217 @@
 <template>
-  <common-layout>
-    <div class="top">
-      <div class="header">
-        <img alt="logo" class="logo" src="@/assets/img/logo.png" />
-        <span class="title">{{systemName}}</span>
-      </div>
-      <div class="desc">Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+    <div class="ai-register-main">
+        <h3>注册</h3>
+        <a-form @submit="handleSubmit" :form="form">
+            <a-form-item>
+                <a-input placeholder="邮箱" size="large"
+                         v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱地址!' }] }]"/>
+            </a-form-item>
+            <a-popover placement="rightTop" v-model="visible">
+                <div style="padding: 4px 0;width:240px;" slot="content">
+                    <div v-show="passwordStatus==='ok'" class="success">强度：强</div>
+                    <div v-show="passwordStatus==='pass'" class="warning">强度：中</div>
+                    <div v-show="passwordStatus==='poor'" class="error">强度：太短</div>
+                    <div :class="`progress-${passwordStatus}`">
+                        <a-progress :status="passwordProgressStatus" class="progress" :strokeWidth="6"
+                                    :percent="passwordProgressPercent" :showInfo="false"/>
+                    </div>
+                    <div style="marginTop: 10">
+                        请至少输入 6 个字符。请不要使用容易被猜到的密码。
+                    </div>
+                </div>
+                <a-form-item :help="help">
+                    <a-input type="password" placeholder="至少6位密码，区分大小写" size="large" v-decorator="['password', {rules: [
+                                            { validator: this.checkPassword }
+                                            ]}]"/>
+                </a-form-item>
+            </a-popover>
+            <a-form-item>
+                <a-input type="password" placeholder="确认密码" size="large" v-decorator="['confirm', {rules: [
+                                            { required: true, message: '请确认密码！', },
+                                            { validator: this.checkConfirm, },
+                                            ]}]"/>
+            </a-form-item>
+            <a-form-item>
+                <a-input placeholder="11位手机号" size="large" v-decorator="['mobile', {rules: [
+                                            { required: true, message: '请输入手机号！' },
+                                            ]}]">
+                    <a-select slot="addonBefore" defaultValue="+86" style="width: 90px">
+                        <a-select-option value="86">+86</a-select-option>
+                        <a-select-option value="87">+87</a-select-option>
+                    </a-select>
+                </a-input>
+            </a-form-item>
+            <a-form-item>
+                <a-row :gutter="8">
+                    <a-col :span="16">
+                        <a-input placeholder="验证码" size="large"
+                                 v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码!' }]}]"/>
+                    </a-col>
+                    <a-col :span="8">
+                        <a-send-captcha-button v-model="start" @click="send" :second="120" class="getCaptcha"
+                                               storageKey="SendCaptchaStorageRegisterKey" size="large"/>
+                    </a-col>
+                </a-row>
+            </a-form-item>
+            <a-form-item>
+
+                <a-button  :loading="logging" size="large" class="submit" type="primary" htmlType="submit">
+                    注册
+                </a-button>
+                <router-link class="login" to="/login">使用已有账户登录</router-link>
+            </a-form-item>
+        </a-form>
     </div>
-    <div class="login">
-      <a-form @submit="onSubmit" :form="form">
-        <a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">
-          <a-tab-pane tab="账户密码登录" key="1">
-            <a-alert type="error" :closable="true" v-show="error" :message="error" showIcon style="margin-bottom: 24px;" />
-            <a-form-item>
-              <a-input
-                autocomplete="autocomplete"
-                size="large"
-                placeholder="请输入账户名"
-                v-decorator="['name', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
-              >
-                <a-icon slot="prefix" type="user" />
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-               <a-input-password   size="large"   placeholder="请输入密码" autocomplete="autocomplete" type="password"  v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]" >
-                  <a-icon slot="prefix" type="lock" />
-               </a-input-password>
-              <!-- <a-input
-                size="large"
-                placeholder="888888"
-                autocomplete="autocomplete"
-                type="password"
-                v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
-              >
-                <a-icon slot="prefix" type="lock" />
-              </a-input> -->
-            </a-form-item>
-          </a-tab-pane>
-          <a-tab-pane tab="手机号登录" key="2">
-            <a-form-item>
-              <a-input size="large" placeholder="mobile number" >
-                <a-icon slot="prefix" type="mobile" />
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-              <a-row :gutter="8" style="margin: 0 -4px">
-                <a-col :span="16">
-                  <a-input size="large" placeholder="captcha">
-                    <a-icon slot="prefix" type="mail" />
-                  </a-input>
-                </a-col>
-                <a-col :span="8" style="padding-left: 4px">
-                  <a-button style="width: 100%" class="captcha-button" size="large">获取验证码</a-button>
-                </a-col>
-              </a-row>
-            </a-form-item>
-          </a-tab-pane>
-        </a-tabs>
-        <div>
-          <a-checkbox :checked="true" >自动登录</a-checkbox>
-          <a style="float: right">忘记密码</a>
-        </div>
-        <a-form-item>
-          <a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登录</a-button>
-        </a-form-item>
-        <div>
-          其他登录方式
-          <a-icon class="icon" type="alipay-circle" />
-          <a-icon class="icon" type="taobao-circle" />
-          <a-icon class="icon" type="weibo-circle" />
-          <router-link style="float: right" to="/register" >注册账户</router-link>
-        </div>
-      </a-form>
-    </div>
-  </common-layout>
 </template>
 
 <script>
-import CommonLayout from '@/layouts/CommonLayout'
-import {login, getRoutesConfig} from '@/services/user'
-import {setAuthorization} from '@/utils/request'
-import {loadRoutes} from '@/utils/routerUtil'
-import {mapMutations} from 'vuex'
 
-export default {
-  name: 'Login',
-  components: {CommonLayout},
-  data () {
-    return {
-      logging: false,
-      error: '',
-      form: this.$form.createForm(this)
-    }
-  },
-  computed: {
-    systemName () {
-      return this.$store.state.setting.systemName
-    }
-  },
-  methods: {
-    ...mapMutations('account', ['setUser', 'setPermissions', 'setRoles']),
-    onSubmit (e) {
-      console.log(e)
-      e.preventDefault()
-      this.form.validateFields((err) => {
-        if (!err) {
-          this.logging = true
-          const name = this.form.getFieldValue('name')
-          const password = this.form.getFieldValue('password')
-          login(name, password).then(this.afterLogin)
+    import SendCaptchaButton from "@/components/SendCaptchaButton";
+
+    export default {
+        name: "ai-register",
+        data() {
+            return {
+                visible: false,
+                help: "",
+                passwordStatus: "poor",
+                start: false,
+                passwordProgressPercent: 0,
+                passwordProgressStatus: "active",
+                form: this.$form.createForm(this)
+            }
+        },
+        components: {
+            ASendCaptchaButton: SendCaptchaButton,
+        },
+        methods: {
+            checkPassword(rule, value, callback) {
+                if (!value) {
+                    this.help = "请输入密码！";
+                    this.visible = !!value;
+                    callback("error");
+                } else {
+                    this.passwordProgressPercent =
+                        value.length * 10 > 100 ? 100 : value.length * 10;
+                    if (value && value.length > 5) {
+                        this.passwordStatus = "pass";
+                        this.passwordProgressStatus = "active";
+                    }
+                    if (value && value.length > 9) {
+                        this.passwordStatus = "ok";
+                        this.passwordProgressStatus = "success";
+                    }
+                    if (value && value.length < 6) {
+                        this.passwordStatus = "poor";
+                        this.passwordProgressStatus = "exception";
+                    }
+                    this.help = "";
+                    if (!this.visible) {
+                        this.visible = !!value;
+                    }
+                    if (value.length < 6) {
+                        callback("error");
+                    } else {
+                        callback();
+                    }
+                }
+            },
+            checkConfirm(rule, value, callback) {
+                if (value && value !== this.form.getFieldValue("password")) {
+                    callback("两次输入的密码不匹配!");
+                } else {
+                    callback();
+                }
+            },
+            handleSubmit() {
+                this.form.validateFields((err, values) => {
+                    if (!err) {
+                        console.log("Received values of form: ", values);
+                        //this.$router.push({path:'/'})
+                    }
+                });
+            },
+            send() {
+                new Promise((resolve, reject) => {
+                    this.form.validateFields(["mobile"], {}, (err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            this.$message.loading("Action in progress..", 0);
+                            setTimeout(() => {
+                                this.start = true;
+                                this.$message.destroy();
+                                this.$message.success("This is a message of success code [ 4569 ]", 10);
+                            }, 1000);
+                        }
+                    });
+                });
+            }
         }
-      })
-    },
-    afterLogin(res) {
-      this.logging = false
-      const loginRes = res.data
-      if (loginRes.code >= 0) {
-        const {user, permissions, roles} = loginRes.data
-        this.setUser(user)
-        this.setPermissions(permissions)
-        this.setRoles(roles)
-        setAuthorization({token: loginRes.data.token, expireAt: new Date(loginRes.data.expireAt)})
-        // 获取路由配置
-        getRoutesConfig().then(result => {
-          const routesConfig = result.data.data
-          loadRoutes({router: this.$router, store: this.$store, i18n: this.$i18n}, routesConfig)
-          this.$router.push('/dashboard/workplace')
-          this.$message.success(loginRes.message, 3)
-        })
-      } else {
-        this.error = loginRes.message
-      }
-    }
-  }
-}
+    };
 </script>
+<style lang="less">
 
-<style lang="less" scoped>
+    .ai-register-main {
+        width: 368px;
+        margin: 0 auto;
 
-  .common-layout{
-    .top {
-      text-align: center;
-      .header {
-        height: 44px;
-        line-height: 44px;
-        a {
-          text-decoration: none;
+        :global {
+            .ant-form-item {
+                margin-bottom: 24px;
+            }
         }
-        .logo {
-          height: 44px;
-          vertical-align: top;
-          margin-right: 16px;
+
+        h3 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: left;
         }
-        .title {
-          font-size: 33px;
-          color: @title-color;
-          font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-          font-weight: 600;
-          position: relative;
-          top: 2px;
+
+        .getCaptcha {
+            display: block;
+            width: 100%;
         }
-      }
-      .desc {
-        font-size: 14px;
-        color: @text-color-second;
-        margin-top: 12px;
-        margin-bottom: 40px;
-      }
+
+        .submit {
+            float: left;
+            width: 50%;
+        }
+
+        .login {
+            float: right;
+            line-height: @btn-height-lg;
+        }
+
+        .ant-form-explain {
+            margin-top: 0px;
+        }
     }
-    .login{
-      width: 368px;
-      margin: 0 auto;
-      @media screen and (max-width:  @screen-sm) {
-        width: 95%;
-      }
-      @media screen and (max-width: 320px) {
-        .captcha-button{
-          font-size: 14px;
-        }
-      }
-      .icon {
-        font-size: 24px;
-        color: @text-color-second;
-        margin-left: 16px;
-        vertical-align: middle;
-        cursor: pointer;
+
+    .success,
+    .warning,
+    .error {
         transition: color 0.3s;
-
-        &:hover {
-          color: @primary-color;
-        }
-      }
     }
-  }
+
+    .success {
+        color: @success-color;
+    }
+
+    .warning {
+        color: @warning-color;
+    }
+
+    .error {
+        color: @error-color;
+    }
+
+    .progress-pass > .progress {
+        :global {
+            .ant-progress-bg {
+                background-color: @warning-color;
+            }
+        }
+    }
+
 </style>

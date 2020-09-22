@@ -1,7 +1,7 @@
 import TabsView from '@/layouts/tabs/TabsView'
 import BlankView from '@/layouts/BlankView'
 import PageView from '@/layouts/PageView'
-
+import UserLayout from '@/layouts/header/UserLayout'
 // 路由配置
 const options = {
   base: '/vue-antd-admin',
@@ -9,14 +9,13 @@ const options = {
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
-      path: '/login',
-      name: '登录页',
-      component: () => import('@/pages/login/Login')
-    },
-    {
-      path:"/register",
-      name:"注册页",
-      component:  () => import('@/pages/login/Register')
+      path: '/user',
+      component: UserLayout,
+      children: [
+        //{ path: '/user', redirect: '/user/dashboard' },
+        { path: '/login', component: () => import('@/pages/login/Login') },
+        { path: '/register', component: () => import('@/pages/login/Register') },
+      ],
     },
     {
       path: '*',
