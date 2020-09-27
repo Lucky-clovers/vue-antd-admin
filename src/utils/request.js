@@ -97,6 +97,8 @@ function checkAuthorization(authType = AUTH_TYPE.BEARER) {
   return false
 }
 
+
+
 /**
  * 加载 axios 拦截器
  * @param interceptors

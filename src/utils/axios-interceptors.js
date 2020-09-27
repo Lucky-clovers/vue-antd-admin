@@ -1,4 +1,5 @@
 import Cookie from 'js-cookie'
+import store from "../store";
 // 401拦截
 const resp401 = {
   /**
@@ -46,9 +47,22 @@ const reqCommon = {
    */
   onFulfilled(config, options) {
     const {message} = options
-    const {url, xsrfCookieName} = config
-    if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
-      message.warning('认证 token 已过期，请重新登录')
+    const { url,xsrfCookieName} = config
+    const urlList = ["login","register"]
+    const signIn = store.state.account.signIn
+    /**
+     * 请求拦截器
+     */
+    urlList.forEach(values=>{
+      if(url.indexOf(values) === -1){
+        console.log("url.indexOf(values) === -1",url.indexOf(values) === -1)
+        store.commit('account/setSignIn', -1)
+
+      }
+    })
+    console.log(signIn)
+    if (signIn === 200 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+        message.warning('认证 token 已过期，请重新登录')
     }
     return config
   },

@@ -9,7 +9,7 @@ const user = Mock.mock({
 })
 Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/register`, 'post', ({body}) => {
     let result = {}
-    const {captcha,confirm,password} = JSON.parse(body)
+    const {captcha,confirm,password,email} = JSON.parse(body)
     //     email:   邮箱
     //     mobile: 手机
     if ( captcha !== '4569' ) {
@@ -20,7 +20,7 @@ Mock.mock(`${process.env.VUE_APP_API_BASE_URL}/register`, 'post', ({body}) => {
         result.message = '两次密码不一样'
     } else {
         result.code = 200
-        result.message = Mock.mock('@WELCOME').CN + '，注册成功'
+        result.message = email+ '，注册成功'
         result.data = {}
         result.data.user = user
     }

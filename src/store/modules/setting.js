@@ -53,6 +53,7 @@ export default {
     setTheme (state, theme) {
       state.theme = theme
     },
+
     setLayout (state, layout) {
       state.layout = layout
     },

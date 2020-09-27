@@ -50,6 +50,7 @@ const welcomeMessages = [
   }
 ]
 
+
 Random.extend({
   admin () {
     return this.pick(admins)
@@ -57,6 +58,7 @@ Random.extend({
   welcome () {
     return this.pick(welcomeMessages)
   },
+
   timeFix () {
     const time = new Date()
     const hour = time.getHours()

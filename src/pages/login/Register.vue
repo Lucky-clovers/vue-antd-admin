@@ -52,8 +52,8 @@
             <a-form-item>
                 <a-row :gutter="8">
                     <a-col :span="16">
-                        <a-input placeholder="验证码" size="large"
-                                 v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码!' }]}]">
+                        <a-input placeholder="验证码 4569" size="large"
+                                 v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码! ' }]}]">
                             <a-icon  slot="prefix" type="safety-certificate" />
                         </a-input>
                     </a-col>
@@ -77,7 +77,7 @@
 <script>
     import {Register} from '@/services/user'
     import SendCaptchaButton from "@/components/SendCaptchaButton";
-   // import {loadRoutes} from '@/utils/routerUtil'
+
     export default {
         name: "ai-register",
         data() {
@@ -140,36 +140,22 @@
                     if (!err) {
                         this.logging = true
                         console.log('Received values of form: ', values);
-
-                        Register(values).then((res)=>{
-                            this.logging = false
-                            if(res.data.code == 200){
-                                this.$router.push('/login')
-                            }
-                            console.log(res)
-                        })
+                        Register(values).then(this.afterRegister)
                     }
                 })
             },
-            // afterLogin(res) {
-            //     this.logging = false
-            //     const loginRes = res.data
-            //     if (loginRes.code >= 0) {
-            //         const {user, permissions, roles} = loginRes.data
-            //         this.setUser(user)
-            //         this.setPermissions(permissions)
-            //         this.setRoles(roles)
-            //         // 获取路由配置
-            //         getRoutesConfig().then(result => {
-            //             const routesConfig = result.data.data
-            //             loadRoutes({router: this.$router, store: this.$store, i18n: this.$i18n}, routesConfig)
-            //             this.$router.push('/login')
-            //             this.$message.success(loginRes.message, 3)
-            //         })
-            //     } else {
-            //         this.error = loginRes.message
-            //     }
-            // },
+            afterRegister(res){
+                console.log(res)
+                this.logging = false
+                const registerRes = res.data
+                if (registerRes.code == 200) {
+                    this.$message.warning(registerRes.message)
+                    this.$router.push({ path: '/login' })
+
+                } else {
+                    this.$message.warning(registerRes.message)
+                }
+            },
             send() {
                 new Promise((resolve, reject) => {
                     this.form.validateFields(["mobile"], {}, (err) => {
