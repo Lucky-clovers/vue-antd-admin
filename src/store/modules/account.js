@@ -75,7 +75,6 @@ export default {
       localStorage.setItem(process.env.VUE_APP_ROUTES_KEY, JSON.stringify(routesConfig))
     },
     setSignIn (state,signIn) {
-      console.log(signIn)
       state.signIn = signIn
     },
   }
