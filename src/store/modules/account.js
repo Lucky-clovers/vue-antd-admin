@@ -31,6 +31,7 @@ export default {
       }
       return state.permissions
     },
+
     roles: state => {
       if (!state.roles) {
         try {
@@ -74,8 +75,6 @@ export default {
       state.routesConfig = routesConfig
       localStorage.setItem(process.env.VUE_APP_ROUTES_KEY, JSON.stringify(routesConfig))
     },
-    setSignIn (state,signIn) {
-      state.signIn = signIn
-    },
+
   }
 }

@@ -51,7 +51,10 @@ module.exports = {
         name: '小組件',
         taskCard: {name: '任務卡片'},
         palette: {name: '顏色複選框'}
-      }
+      },
+      authForm:{
+        name:"驗權表單"
+      },
     }
   }
 }

@@ -110,12 +110,12 @@
           <a style="margin-right: 8px">
             <a-icon type="edit"/>编辑
           </a>
-          <a @click="deleteRecord(record.key)">
-            <a-icon type="delete" />删除1
+          <a @click="deleteRecord(record.key)" >
+            <a-icon type="delete" />删除
           </a>
-          <a @click="deleteRecord(record.key)" v-auth="`delete`">
-            <a-icon type="delete" />删除2
-          </a>
+<!--          <a @click="deleteRecord(record.key)" >-->
+<!--            <a-icon type="delete" />删除2-->
+<!--          </a>-->
         </div>
         <template slot="statusTitle">
           <a-icon @click.native="onStatusTitleClick" type="info-circle" />
@@ -184,11 +184,12 @@ export default {
       selectedRows: []
     }
   },
-  authorize: {
-    deleteRecord: 'delete'
+  authorize: {              //权限校验注入设置
+    deleteRecord: 'delete'  //key为需要注入权限校验的方法名，这里为 deleteRecord 方法；值为需要校验的操作权限，这里为 delete 操作权限
   },
   methods: {
     deleteRecord(key) {
+      console.log(key)
       this.dataSource = this.dataSource.filter(item => item.key !== key)
       this.selectedRows = this.selectedRows.filter(item => item.key !== key)
     },

@@ -13,8 +13,8 @@ const options = {
       component: UserLayout,
       children: [
         //{ path: '/user', redirect: '/user/dashboard' },
-        { path: '/login', component: () => import('@/pages/login/Login') },
-        { path: '/register', component: () => import('@/pages/login/Register') },
+        { path: '/login', name: '登录', component: () => import('@/pages/login/Login') },
+        { path: '/register', name: '注册', component: () => import('@/pages/login/Register') },
       ],
     },
     {
@@ -210,16 +210,18 @@ const options = {
               path: 'palette',
               name: '颜色复选框',
               component: () => import('@/pages/components/Palette')
-            }
+            },
+
           ]
         },
         {
           name: '验权表单',
-          path: 'auth/form',
+          path: 'authForm',
           meta: {
             icon: 'file-excel',
             authority: {
-              permission: 'form'
+              role: 'admin'
+              //permission: 'queryForm'
             }
           },
           component: () => import('@/pages/form/basic')
