@@ -92,6 +92,9 @@ export default {
     },
     setActivatedFirst(state, activatedFirst) {
       state.activatedFirst = activatedFirst
+    },
+    setFixedTabs(state, fixedTabs) {
+      state.fixedTabs = fixedTabs
     }
   }
 }

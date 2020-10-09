@@ -50,6 +50,7 @@ const welcomeMessages = [
   }
 ]
 
+const goods = ['运动鞋', '短裤', 'T恤', '七分裤', '风衣', '寸衫']
 
 Random.extend({
   admin () {
@@ -70,6 +71,9 @@ Random.extend({
   },
   position () {
     return this.pick(positions)
+  },
+  goods () {
+    return this.pick(goods)
   },
   saying () {
     return this.pick(sayings)

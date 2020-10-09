@@ -6,5 +6,6 @@ module.exports = {
   LOGIN: `${BASE_URL}/login`,
   PHONELOGIN: `${BASE_URL}/phoneLogin`,
   ROUTES: `${BASE_URL}/routes`,
-  REGISTER: `${BASE_URL}/register`
+  REGISTER: `${BASE_URL}/register`,
+  GOODS: `${BASE_URL}/goods`,
 }

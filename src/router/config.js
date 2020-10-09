@@ -44,6 +44,11 @@ const options = {
             {
               path: 'workplace',
               name: '工作台',
+              meta: {
+                page: {
+                  closable: false
+                }
+              },
               component: () => import('@/pages/dashboard/workplace'),
             },
             {
@@ -195,7 +200,7 @@ const options = {
         },
         {
           path: 'components',
-          name: '小组件',
+          name: '内置组件',
           meta: {
             icon: 'appstore-o'
           },
@@ -211,7 +216,11 @@ const options = {
               name: '颜色复选框',
               component: () => import('@/pages/components/Palette')
             },
-
+            {
+              path: 'table',
+              name: '高级表格',
+              component: () => import('@/pages/components/table')
+            }
           ]
         },
         {
