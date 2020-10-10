@@ -47,7 +47,7 @@ const reqCommon = {
   onFulfilled(config, options) {
     const {message} = options
     const { url,xsrfCookieName} = config
-    const urlList = ["login","register","phoneLogin"]
+    const urlList = ["login","register","phoneLogin", "phoneCode"]
     const urlArr = url.split("/")
     /**
      * 请求拦截器

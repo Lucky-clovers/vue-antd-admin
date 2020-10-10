@@ -75,6 +75,7 @@
 </template>
 
 <script>
+ import { phoneCode} from '@/services/user'
     import {Register} from '@/services/user'
     import SendCaptchaButton from "@/components/SendCaptchaButton";
 
@@ -162,11 +163,19 @@
                         if (err) {
                             reject(err);
                         } else {
+                             const phone = this.phoneForm.getFieldValue('phone')
                             this.$message.loading("Action in progress..", 0);
                             setTimeout(() => {
                                 this.start = true;
-                                this.$message.destroy();
-                                this.$message.success("This is a message of success code [ 4569 ]", 10);
+                                phoneCode(phone).then((res)=>{
+                                    this.$message.destroy();
+                                    if(res.data.code !== -1){
+                                        this.$message.success(`${res.data.message}`, 2);
+                                    }else{
+                                        this.$message.error(`${res.data.message}`, 2);
+                                    }
+
+                                })
                             }, 1000);
                         }
                     });

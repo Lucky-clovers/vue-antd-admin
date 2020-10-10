@@ -1,4 +1,4 @@
-import {LOGIN, ROUTES, REGISTER, PHONELOGIN} from '@/services/api'
+import {LOGIN, ROUTES, REGISTER, PHONELOGIN, PHONECODE} from '@/services/api'
 import {request, METHOD, removeAuthorization} from '@/utils/request'
 
 /**
@@ -16,6 +16,17 @@ export async function login(name, password) {
 
 export async function getRoutesConfig() {
   return request(ROUTES, METHOD.GET)
+}
+/**
+ * 获取手机验证码
+ * @param phone 手机号
+ * @return {Promise<AxiosResponse<T>>}
+ */
+
+export async function phoneCode(phone) {
+  return request(PHONECODE, METHOD.POST, {
+    phone: phone,
+  })
 }
 
 /**
@@ -64,6 +75,7 @@ export default {
   login,
   logout,
   Register,
+  phoneCode,
   getRoutesConfig
 }
 
