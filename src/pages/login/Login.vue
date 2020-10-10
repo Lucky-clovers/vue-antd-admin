@@ -149,7 +149,8 @@
                     // 获取路由配置
                     getRoutesConfig().then(result => {
                         const routesConfig = result.data.data
-                        loadRoutes({router: this.$router, store: this.$store, i18n: this.$i18n}, routesConfig)
+                        //loadRoutes({router: this.$router, store: this.$store, i18n: this.$i18n}, routesConfig)
+                        loadRoutes(routesConfig)
                         this.$router.push('/dashboard/workplace')
                         this.$message.success(loginRes.message, 3)
 
@@ -166,19 +167,26 @@
                             reject(err);
                         } else {
                              const phone = this.phoneForm.getFieldValue('phone')
-                            this.$message.loading("Action in progress..", 0);
-                            setTimeout(() => {
-                                this.start = true;
-                                phoneCode(phone).then((res)=>{
-                                    this.$message.destroy();
-                                    if(res.data.code !== -1){
-                                        this.$message.success(`${res.data.message}`, 2);
-                                    }else{
-                                        this.$message.error(`${res.data.message}`, 2);
-                                    }
+                             const phoneReg = /^(?:(?:\+|00)86)?1\d{10}$/
+                             if(!phoneReg.test(phone)){
+                                this.error = '手机号码错误，无法发送验证码,请重新输入'
 
-                                })
-                            }, 1000);
+                             }else{
+                                this.$message.loading("Action in progress..", 0);
+                                setTimeout(() => {
+                                    this.start = true;
+                                    phoneCode(phone).then((res)=>{
+                                        this.$message.destroy();
+                                        if(res.data.code !== -1){
+                                            this.$message.success(`${res.data.message}`, 2);
+                                        }else{
+                                            this.$message.error(`${res.data.message}`, 2);
+                                        }
+
+                                    })
+                                }, 1000);
+                             }
+
                         }
                     });
                 });
