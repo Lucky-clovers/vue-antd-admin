@@ -39,29 +39,30 @@ function parseRoutes(routesConfig, routerMap) {
       router = routerMap[item.router]
       routeCfg = item
     }
-    // 从 router 和 routeCfg 解析路由
     if (!router) {
       console.warn(`can't find register for router ${routeCfg.router}, please register it in advance.`)
-    } else {
-      const route = {
-        path: routeCfg.path || router.path || routeCfg.router,
-        name: routeCfg.name || router.name,
-        component: router.component,
-        redirect: routeCfg.redirect || router.redirect,
-        meta: {
-          authority: routeCfg.authority || router.authority || '*',
-          icon: routeCfg.icon || router.icon,
-          page: routeCfg.page || router.page
-        }
-      }
-      if (routeCfg.invisible || router.invisible) {
-        route.meta.invisible = true
-      }
-      if (routeCfg.children && routeCfg.children.length > 0) {
-        route.children = parseRoutes(routeCfg.children, routerMap)
-      }
-      routes.push(route)
+      router = typeof item === 'string' ? {path: item, name: item} : item
     }
+    // 从 router 和 routeCfg 解析路由
+    const route = {
+      path: routeCfg.path || router.path || routeCfg.router,
+      name: routeCfg.name || router.name,
+      component: router.component,
+      redirect: routeCfg.redirect || router.redirect,
+      meta: {
+        authority: routeCfg.authority || router.authority || '*',
+        icon: routeCfg.icon || router.icon,
+        page: routeCfg.page || router.page,
+        link: routeCfg.link || router.link
+      }
+    }
+    if (routeCfg.invisible || router.invisible) {
+      route.meta.invisible = true
+    }
+    if (routeCfg.children && routeCfg.children.length > 0) {
+      route.children = parseRoutes(routeCfg.children, routerMap)
+    }
+    routes.push(route)
   })
   return routes
 }
